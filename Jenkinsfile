@@ -4,9 +4,9 @@ pipeline{
         jdk 'Java17'
         nodejs 'node16'
     }
-    //environment {
-        //SCANNER_HOME=tool 'sonarqube-scanner'
-    //}
+    environment {
+        SCANNER_HOME=tool 'sonarqube-scanner'
+    }
     stages {
         stage('clean workspace'){
             steps{
@@ -18,16 +18,12 @@ pipeline{
                 git branch: 'main', url: 'https://github.com/ayongpeterking/DevSecOps-Project.git'
             }
         }
-        stage("Sonarqube Analysis "){
-            steps {
-                script {
-                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
-                        sh ''' -Dsonar.projectName=netflix \
-                    -Dsonar.projectKey=netflix '''
-                    }
-                }
-            }
-        }
+        stage('SonarQube Analysis') {
+    
+          withSonarQubeEnv(credentialsId: 'sonarqube4') {
+             sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
         
     }
 }
