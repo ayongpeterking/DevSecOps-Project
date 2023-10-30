@@ -22,7 +22,7 @@ pipeline{
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=netflix \
+                        sh ''' -Dsonar.projectName=netflix \
                     -Dsonar.projectKey=netflix '''
                     }
                 }
