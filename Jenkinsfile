@@ -23,7 +23,7 @@ pipeline{
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonarqube4') {
-                        sh "${scannerHome}/bin/sonar-scanner"
+                        sh "sonar-scanner"
                     }
                 }
             }
