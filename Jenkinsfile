@@ -23,7 +23,8 @@ pipeline{
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonarqube4') {
-                        sh "${SCANNER_HOME}/bin/sonar-scanner"
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=netflix \
+                    -Dsonar.projectKey=netflix '''
                     }
                 }
             }
