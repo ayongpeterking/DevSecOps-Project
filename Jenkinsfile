@@ -18,12 +18,15 @@ pipeline{
                 git branch: 'main', url: 'https://github.com/ayongpeterking/DevSecOps-Project.git'
             }
         }
-        stage('SonarQube Analysis') {
-    
-          withSonarQubeEnv(credentialsId: 'sonarqube4') {
-             sh "${scannerHome}/bin/sonar-scanner"
-    }
-  }
+
+        stage("Sonarqube Analysis") {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonarqube4') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
         
     }
 }
