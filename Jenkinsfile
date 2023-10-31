@@ -37,6 +37,7 @@ pipeline{
                     waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube4'
                 }
             }
+        }   
     }
 
 }    
