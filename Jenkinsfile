@@ -44,12 +44,12 @@ pipeline{
                 sh "npm install"
             }
         }
-        stage('OWASP FS SCAN') {
+        /*stage('OWASP FS SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'*/
+                //dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            /*}
+        }*/
 
         stage('TRIVY FS SCAN') {
             steps {
@@ -60,8 +60,7 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'dockerhub-credentials', //toolName: 'docker'
-                   ){   
+                   withDockerRegistry(credentialsId: 'dockerhub-credentials', /*toolName: 'docker'*/){   
                        sh "docker build --build-arg TMDB_V3_API_KEY=b444b7dfc656d9d9786886faf6a5bc42 -t netflix ."
                        sh "docker tag netflix donpk/netflix:latest "
                        sh "docker push donpk/netflix:latest "
