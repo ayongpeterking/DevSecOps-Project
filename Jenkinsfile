@@ -49,7 +49,7 @@ pipeline{
                 dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
-        /
+        
 
         stage('TRIVY FS SCAN') {
             steps {
