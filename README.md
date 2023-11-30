@@ -182,20 +182,28 @@ nginx-ingress-ingress-nginx-controller-admission   ClusterIP      10.98.12.216  
 - Implement an AWS Network Load Balancer to distribute incoming traffic efficiently across the Kubernetes nodes.
   - Create 2 target groups one for http traffic and the other for https 
     - Log in to AWS Management Console and navigate to the EC2 Dashboard.
+    - Under Load Balancing, select Target Groups and click Create Target Group
+    - Choose the Target Type as instances
+    - Set the Name (eg http-tg, https-tg )
+    - For Protocol select tcp and set the port number of the http target group to the http port number of the ingress-controller. Do same for the https target group.
+    - Select the VPC created
+    - Configure Health Check protocol as tcp
+    - Register the two worker nodes ec2s
+    - Review and click Create
 
-Under Load Balancing, select Target Groups and click Create Target Group.
+  - Create a Network Load Balancer
+    - Under Load Balancing, select Load Balancers and click Create Load Balancer
+    - Choose Network Load Balancer and configure the 
+    > Name, 
+    > Scheme, 
+    > IP address type).
 
-Choose the Target Type (e.g., instances, IP addresses).
+Select a VPC and assign subnets in different Availability Zones.
 
-Set the Name, Protocol, and Port for the target group.
+Define Listeners and create/select a Target Group for routing.
 
-Select a VPC.
 
-Configure Health Check settings (protocol, path, and success codes).
-
-Register Targets to the group (like specific EC2 instances).
-
-Review and click Create
+Review settings and click Create.
 
 ### 4. DNS Configuration with Route 53
 - Use AWS Route 53 to manage the DNS for effective domain name resolution and routing to the static website.
