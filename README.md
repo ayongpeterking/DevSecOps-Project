@@ -193,10 +193,19 @@ nginx-ingress-ingress-nginx-controller-admission   ClusterIP      10.98.12.216  
 
   - Create a Network Load Balancer
     - Under Load Balancing, select Load Balancers and click Create Load Balancer
-    - Choose Network Load Balancer and configure
+    - Choose Network Load Balancer and click create 
+    configure:
       - **Name**: Assign a unique name
       - **Scheme**: Choose internet-facing
       - **IP address type**: Select IPv4
+    Set Network & Subnet:
+      - **Choose** a VPC.
+      - **Select at least two subnets in different Availability Zones**.
+    Security groups
+      - **Choose the default security group**.(Make sure it allows traffic on ports 80 and 443)  
+    Set Listeners and Routing:
+      - Define listeners (e.g., TCP port 80 for HTTP).
+Choose or create a target group for routing.
 
 Select a VPC and assign subnets in different Availability Zones.
 
