@@ -193,47 +193,87 @@ nginx-ingress-ingress-nginx-controller-admission   ClusterIP      10.98.12.216  
 
   - Create a Network Load Balancer
     - Under Load Balancing, select Load Balancers and click Create Load Balancer
-    - Choose Network Load Balancer and click create 
-    configure:
+    - Choose Network Load Balancer, click create and configure
       - **Name**: Assign a unique name
       - **Scheme**: Choose internet-facing
       - **IP address type**: Select IPv4
-    Set Network & Subnet:
       - **Choose** a VPC.
       - **Select at least two subnets in different Availability Zones**.
-    Security groups
       - **Choose the default security group**.(Make sure it allows traffic on ports 80 and 443)  
-    Set Listeners and Routing:
-      - Define listeners (e.g., TCP port 80 for HTTP).
-Choose or create a target group for routing.
-
-Select a VPC and assign subnets in different Availability Zones.
-
-Define Listeners and create/select a Target Group for routing.
+      - **Define 2 listeners**: For the first one TCP, port 80, and choose the HTTP target group and for the second one TCP, port 443, and choose the HTTPS target group.
+      - **Click create Load Balancer**
 
 
-Review settings and click Create.
 
 ### 4. DNS Configuration with Route 53
 - Use AWS Route 53 to manage the DNS for effective domain name resolution and routing to the static website.
+  - Navigate to the Route 53 Dashboard
+    - Click Create Hosted Zone.
+    - Enter your Domain Name.
+    - Choose Public Hosted Zone and click Create.
+  - Create an Alias Record:
+    - In the Hosted Zone, click on the domain name and click Create Record.
+    - Select Alias 
+    - set Record Name (e.g., www) or leave empty to use root domain
+    - Record type, choose A – Routes traffic to an IPv4 address and some AWS resources
+    - For Route Traffic To, Alias to Network Load Balancer
+    - Select your Region and Load Balancer.
+    - Routing policy, choose simple routing
+    - Click Create Record.
+
 
 ### 5. External Access Control with Nginx Ingress
 - Configure Nginx Ingress in the Kubernetes cluster to manage and control external access to the website.
+  
+  - Create an nginx.yaml file in the home directory containing the deployment and service to run nginx.
+    To create the nginx deployment and service, run
+    ```bash
+    kubectl apply -f nginx.yaml
+    ```
+  - Create an ingress-resource using code from ingress-resource.yaml and run
+  ```bash
+    kubectl apply -f ingress-resource.yaml
+    ```
+  
+  Access the domain name to see the Welcome to nginx! page
+  ![Alt text](./nginx.jpg)
+
+
 
 ### 6. Securing Connections with Cert-Manager
 - Integrate Cert-Manager in the Kubernetes cluster for handling TLS certificate issuance and management.
+  - Install cert-manager using the following command
+  ```bash
+  kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
+  ```
+  - Check if cert-manager pods are running 
+  ```bash
+  kubectl get po -n cert-manager
+  ```
+  You should get this
+  ```
+  NAME                                      READY   STATUS    RESTARTS   AGE
+  cert-manager-7d75f47cc5-j6jtf             1/1     Running   0          53s
+  cert-manager-cainjector-c778d44d8-mg2dd   1/1     Running   0          53s
+  cert-manager-webhook-55d76f97bb-r6zr4     1/1     Running   0          53s
+  ```
 
-## Deployment Steps
-(Here, you can provide a step-by-step guide on how to deploy the project, including Terraform commands, Kubernetes configurations, etc.)
+- Create a letsencrypt cluster issuer using code from letsencrypt-issuer.yaml and run
+    ```bash
+    kubectl apply -f letsencrypt-issuer.yaml
+    ```
+    You should get this
+    ```
+    clusterissuer.cert-manager.io/letsencrypt-prod created
+    ```
 
-## Contributing
-(Instructions for contributing to the project, if applicable.)
+- Now upgrade the ingress resource to use cert-manager and create a tls certificate
+  - Use ingress-resource-tls.yaml to update the ingress resource. Run
+  ```bash
+  kubectl apply -f ingress-resource.tls
+  ```
 
-## License
-(Include information about the project's license, if any.)
-
-## Author
-(Your name and contact information.)
+You site is now secured 
 
 ---
 
